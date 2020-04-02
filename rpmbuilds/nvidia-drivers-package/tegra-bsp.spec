@@ -83,23 +83,22 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
                 ln -sf "../tegra21x/gpccs.bin" "gpccs.bin"
                 popd > /dev/null
 
+				
+	# Add a symlink for the Vulkan ICD.
+	mkdir -p %buildroot/etc/vulkan/icd.d
+	ln -s /usr/lib/aarch64-linux-gnu/tegra/nvidia_icd.json %buildroot/etc/vulkan/icd.d/nvidia_icd.json
+	
+	# And another one for EGL.
+	mkdir -p %buildroot/usr/share/glvnd/egl_vendor.d
+	ln -s /usr/lib64/aarch64-linux-gnu/tegra-egl/nvidia.json %buildroot/usr/share/glvnd/egl_vendor.d/
+	
 	# Refresh /usr/lib/ symlink to be /usr/lib64/
-	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/nvidia_icd.json %buildroot/etc/vulkan/icd.d/nvidia_icd.json
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libcuda.so %buildroot/usr/lib64/aarch64-linux-gnu/libcuda.so
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libcuda.so.1.1 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libcuda.so
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libnvbuf_utils.so.1.0.0 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libnvbuf_utils.so
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libnvbufsurface.so.1.0.0 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libnvbufsurface.so
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libnvbufsurftransform.so.1.0.0 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libnvbufsurftransform.so
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libnvid_mapper.so.1.0.0 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libnvid_mapper.so
-	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra-egl/nvidia.json %buildroot/usr/share/glvnd/egl_vendor.d/10_nvidia.json
-
-	# Add a symlink for the Vulkan ICD.
-	mkdir -p %buildroot/etc/vulkan/icd.d
-	ln -s /usr/lib/aarch64-linux-gnu/tegra/nvidia_icd.json %buildroot/etc/vulkan/icd.d/nvidia_icd.json
-
-	# And another one for EGL.
-	mkdir -p %buildroot/usr/share/glvnd/egl_vendor.d
-	ln -s /usr/lib64/aarch64-linux-gnu/tegra-egl/nvidia.json %buildroot/usr/share/glvnd/egl_vendor.d/
 	
 	cp -d %buildroot/usr/lib64/aarch64-linux-gnu/tegra-egl/ld.so.conf %buildroot/etc/ld.so.conf.d/
 

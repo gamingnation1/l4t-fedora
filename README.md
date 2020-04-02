@@ -13,7 +13,7 @@ A SD Card with a minimum of 8Go.
 
 ### Dependencies
 
-For Arch install `qemu-user-static` from `AUR` and :
+On Arch host install `qemu-user-static` from `AUR` and :
 
 ```sh
 sudo pacman -S qemu qemu-arch-extra arch-install-scripts parted dosfstools wget libarchive lvm2 multipath-tools
