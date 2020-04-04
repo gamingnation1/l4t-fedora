@@ -1,6 +1,10 @@
 #!/usr/bin/bash
 uname -a
 
+# arch-chroot doesn't do this for us, so let's do it ourselves.
+mkdir /mnt/hos_data/l4t-fedora -p
+mount --bind /mnt/hos_data/l4t-fedora/ /boot/
+
 dnf -y groupinstall 'Basic Desktop' 'LXDE Desktop'
 
 mkdir xorg/
@@ -21,12 +25,15 @@ rpmbuild -ba /rpmbuilds/switch-configs/switch-configs.spec
 rpm -ivvh --force /root/rpmbuild/RPMS/aarch64/switch-configs-1-1.aarch64.rpm
 rpm -ivvh --force /root/rpmbuild/RPMS/aarch64/tegra-bsp-r32-3.1.aarch64.rpm
 dnf -y remove gcc git rpm-build rpm-devel rpmlint python patch rpmdevtools
-rm -rf /root/rpmbuilds
+rm -rf /root/rpmbuilds/
 
 dnf -y clean all
 
 echo l4t-fedora.local > /etc/hostname
 echo '127.0.0.1   l4t-fedora.local l4t-fedora' >> /etc/hosts
+sed -i 's/# autologin.*/autologin=fedora/' /etc/lxdm/lxdm.conf
+
+mv etc/systemd/system/getty.target.wants/getty@tty1.service root/
 
 echo "[Unit]
 Description=Setup r2p
@@ -54,5 +61,23 @@ systemctl enable r2p
 systemctl enable bluetooth
 systemctl enable lxdm
 systemctl set-default graphical.target
+
 # sed -i 's/#keyboard=/keyboard=onboard/' /etc/lightdm/lightdm-gtk-greeter.conf
+
 mv /reboot_payload.bin /lib/firmware/
+
+PATH=$PATH:/usr/bin:/usr/sbin
+ldconfig
+useradd -m fedora -p fedora
+echo "Change root passwd :"
+echo "root:root" | chpasswd
+
+umount /boot
+
+cd /mnt/hos_data/
+tar cz * > /fedora-boot.tar.gz
+cd /
+
+rm -r /boot/*
+rm -r /mnt/hos_data/*
+mkdir -p /mnt/hos_data
