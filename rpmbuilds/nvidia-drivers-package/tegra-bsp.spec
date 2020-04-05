@@ -56,8 +56,8 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 	cp -r %{NVdir}/lib/systemd/* %buildroot/usr/lib64/systemd/
 
 	# Pass through these 2 in usr/lib64.
-	cp -r %{NVdir}/usr/lib/xorg %buildroot/usr/lib64/xorg/
-	cp -r %{NVdir}/usr/lib/nvidia %buildroot/usr/lib64/nvidia/
+	cp -r %{NVdir}/usr/lib/xorg %buildroot/usr/lib64/
+	cp -r %{NVdir}/usr/lib/nvidia %buildroot/usr/lib64/
 	
 	# These are OK as well...
 	cp -r %{NVdir}/usr/share %buildroot/usr/share/
