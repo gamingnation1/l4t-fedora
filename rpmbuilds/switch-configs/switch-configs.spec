@@ -24,7 +24,6 @@ URL:		https://gitlab.com/switchroot/switch-l4t-configs
 	cp switch-dconf-customizations/user %buildroot/etc/dconf/profile/
 	cp switch-alsa-ucm/* %buildroot/usr/share/alsa/ucm/tegra-snd-t210ref-mobile-rt565x/
 	cp switch-bluetooth-service/switch-bluetooth.service %buildroot/usr/lib64/systemd/system/
-	cp switch-touch-rules/* %buildroot/usr/lib64/udev/rules.d/
 
 %clean
 

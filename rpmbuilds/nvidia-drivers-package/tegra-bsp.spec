@@ -32,43 +32,43 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 
 	sed -e 's_/usr/lib/aarch64-linux-gnu_/usr/lib64/aarch64-linux-gnu/_' -i %{NVdir}/etc/nv_tegra_release
 	sed -e 's_/usr/lib/_/usr/lib64/_' -i %{NVdir}/etc/nv_tegra_release
-	cp -pdr %{NVdir}/etc/nv_tegra_release %buildroot/etc/nv_tegra_release
-	cp -pdr %{NVdir}/etc/ld.so.conf.d %buildroot/etc/ld.so.conf.d
+	cp %{NVdir}/etc/nv_tegra_release %buildroot/etc/nv_tegra_release
+	cp %{NVdir}/etc/ld.so.conf.d %buildroot/etc/ld.so.conf.d
 	echo "/usr/lib64/aarch64-linux-gnu/tegra" > %buildroot/etc/ld.so.conf.d/nvidia-tegra.conf
 	echo "/usr/lib64/aarch64-linux-gnu/tegra-egl" > %buildroot/etc/ld.so.conf.d/ld.so.conf
 
-	cp -d %{NVdir}/etc/systemd/nv* %buildroot/etc/systemd/
+	cp %{NVdir}/etc/systemd/nv* %buildroot/etc/systemd/
 	cp -d %{NVdir}/etc/systemd/system/nv*service %buildroot/etc/systemd/system/
-	cp -d %{NVdir}/etc/asound.conf.* %buildroot/etc/
+	cp %{NVdir}/etc/asound.conf.* %buildroot/etc/
 	
 	# Get the udev rules & xorg config.
-	cp -pdr %{NVdir}/etc/udev/ %buildroot/etc/udev
+	cp -r %{NVdir}/etc/udev/ %buildroot/etc/udev
 	mkdir %buildroot/etc/X11
-	cp -pdr %{NVdir}/etc/X11/xorg.conf %buildroot/etc/X11/
+	cp -r %{NVdir}/etc/X11/xorg.conf %buildroot/etc/X11/
 
 	mkdir -p %buildroot/usr/lib64/firmware/ %buildroot/usr/lib64/systemd/
 	
 	# Copy usr/lib/aarch64-linux-gnu -> usr/lib64/aarch64-linux-gnu.
-	cp -pdr %{NVdir}/usr/lib/aarch64-linux-gnu/ %buildroot/usr/lib64/
+	cp -r %{NVdir}/usr/lib/aarch64-linux-gnu/ %buildroot/usr/lib64/
 	
 	# Same for lib/firmware, lib/systemd.
-	cp -pdr %{NVdir}/lib/firmware/* %buildroot/usr/lib64/firmware/
-	cp -pdr %{NVdir}/lib/systemd/* %buildroot/usr/lib64/systemd/
+	cp -r %{NVdir}/lib/firmware/* %buildroot/usr/lib64/firmware/
+	cp -r %{NVdir}/lib/systemd/* %buildroot/usr/lib64/systemd/
 
 	# Pass through these 2 in usr/lib64.
-	cp -pdr %{NVdir}/usr/lib/xorg %buildroot/usr/lib64/xorg/
-	cp -pdr %{NVdir}/usr/lib/nvidia %buildroot/usr/lib64/nvidia/
+	cp -r %{NVdir}/usr/lib/xorg %buildroot/usr/lib64/xorg/
+	cp -r %{NVdir}/usr/lib/nvidia %buildroot/usr/lib64/nvidia/
 	
 	# These are OK as well...
-	cp -pdr %{NVdir}/usr/share %buildroot/usr/share/
-	cp -pdr %{NVdir}/usr/bin %buildroot/usr/bin/
+	cp -r %{NVdir}/usr/share %buildroot/usr/share/
+	cp -r %{NVdir}/usr/bin %buildroot/usr/bin/
 	# move sbin -> bin
-	cp -pdr %{NVdir}/usr/sbin/* %buildroot/usr/bin/
+	cp -r %{NVdir}/usr/sbin/* %buildroot/usr/bin/
 	# pass through
-	cp -pdr %{NVdir}/var/ %buildroot/var/
-	cp -pdr %{NVdir}/opt/ %buildroot/opt/ 
+	cp -r %{NVdir}/var/ %buildroot/var/
+	cp -r %{NVdir}/opt/ %buildroot/opt/ 
 
-	[[ ! -d %buildroot/usr/lib64/firmware/gm20b ]] && mkdir %buildroot/usr/lib64/firmware/gm20b
+	[[ ! -e %buildroot/usr/lib64/firmware/gm20b ]] && mkdir %buildroot/usr/lib64/firmware/gm20b
 	pushd %buildroot/usr/lib64/firmware/gm20b > /dev/null 2>&1
                 ln -sf "../tegra21x/acr_ucode.bin" "acr_ucode.bin"
                 ln -sf "../tegra21x/gpmu_ucode.bin" "gpmu_ucode.bin"
@@ -102,8 +102,6 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libnvbufsurface.so.1.0.0 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libnvbufsurface.so
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libnvbufsurftransform.so.1.0.0 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libnvbufsurftransform.so
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libnvid_mapper.so.1.0.0 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libnvid_mapper.so
-	
-	# cp -d %buildroot/usr/lib64/aarch64-linux-gnu/tegra-egl/ld.so.conf %buildroot/etc/ld.so.conf.d/
 
 %clean
 
