@@ -33,7 +33,7 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 	sed -e 's_/usr/lib/aarch64-linux-gnu_/usr/lib64/aarch64-linux-gnu/_' -i %{NVdir}/etc/nv_tegra_release
 	sed -e 's_/usr/lib/_/usr/lib64/_' -i %{NVdir}/etc/nv_tegra_release
 	cp %{NVdir}/etc/nv_tegra_release %buildroot/etc/nv_tegra_release
-	cp %{NVdir}/etc/ld.so.conf.d %buildroot/etc/ld.so.conf.d
+	cp -r %{NVdir}/etc/ld.so.conf.d %buildroot/etc/ld.so.conf.d
 	echo "/usr/lib64/aarch64-linux-gnu/tegra" > %buildroot/etc/ld.so.conf.d/nvidia-tegra.conf
 	echo "/usr/lib64/aarch64-linux-gnu/tegra-egl" > %buildroot/etc/ld.so.conf.d/ld.so.conf
 

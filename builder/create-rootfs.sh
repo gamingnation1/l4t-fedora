@@ -72,7 +72,7 @@ buildiso() {
 	
 	parted ${root_dir}/l4t-fedora.img --script -- mklabel msdos
 	parted -a optimal ${root_dir}/l4t-fedora.img mkpart primary 0% 476MB
-	parted -a optimal ${root_dir}/l4t-fedora.img mkpart primary 477MB 100%
+	parted -a optimal ${root_dir}/l4t-fedora.img mkpart primary 476MB 100%
 
 	loop_dev=$(kpartx -av ${root_dir}/l4t-fedora.img | grep -oh "\w*loop\w*")
 	loop1=`echo "${loop_dev}" | head -1`
