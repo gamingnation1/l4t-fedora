@@ -18,7 +18,7 @@ prepare() {
 	mkdir -p ${root_dir}/tmp/mnt/boot/
 	mkdir -p ${root_dir}/tmp/mnt/root/
 	mkdir -p ${root_dir}/tmp/fedora-bootfs/
-	mkdir -p ${root_dir}/tmp/fedora-rootfs/
+	mkdir -p ${root_dir}/tmp/fedora-rootfs/pkgs/
 	mkdir -p ${root_dir}/tmp/fedora_iso_root/
 
 	if [[ ! -e ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw ]]; then
@@ -34,16 +34,10 @@ prepare() {
 	fi
 }
 
-## TODO: Up to date kernel should be online
-setup_bootfs() {
-	cp -r ${root_dir}/kernel/bootfs/* ${root_dir}/tmp/fedora-bootfs/
-	cp -prd ${root_dir}/kernel/rootfs/lib/{firmware,modules} ${root_dir}/tmp/fedora-rootfs/usr/lib64/
-}
+setup_base() {
+	cp ${root_dir}/builder/build-stage2.sh ${root_dir}/tmp/fedora-rootfs/
+	cp -r ${root_dir}/rpmbuilds/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
 
-setup_rootfs() {
-	cp build-stage2.sh ${root_dir}/tmp/fedora-rootfs/
-	cp -r ${root_dir}/rpmbuilds/ ${root_dir}/tmp/fedora-rootfs/
-	
 	kpartx -av ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw
 	sleep 1
 	vgchange -ay fedora
@@ -56,14 +50,16 @@ setup_rootfs() {
 	vgchange -an fedora
 	kpartx -dv ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw
 
-	echo -e "/dev/mmcblk0p1	/mnt/hos_data	vfat	rw,relatime	0	2\n/boot /mnt/hos_data/l4t-fedora/	none	bind	0	0\n/dev/mmcblk0p2	/	ext4	defaults	0	0" >> ${root_dir}/tmp/fedora-rootfs/etc/fstab
+	echo -e "/dev/mmcblk0p1	/mnt/hos_data	vfat	rw,relatime	0	2\n/boot /mnt/hos_data/l4t-arch/	none	bind	0	0\n" > ${root_dir}/tmp/fedora-rootfs/etc/fstab
 
 	cp /usr/bin/qemu-aarch64-static ${root_dir}/tmp/fedora-rootfs/usr/bin/
 	cp /etc/resolv.conf ${root_dir}/tmp/fedora-rootfs/etc/
 	
-	mount --bind ${root_dir}/tmp/fedora-rootfs ${root_dir}/tmp/fedora-rootfs
+	mount --bind ${root_dir}/tmp/fedora-rootfs ${root_dir}/tmp/fedora-rootfs/
+	mount --bind ${root_dir}/tmp/fedora-bootfs ${root_dir}/tmp/fedora-rootfs/boot/
 	arch-chroot ${root_dir}/tmp/fedora-rootfs/ ./build-stage2.sh
-	sleep 1 && umount -R ${root_dir}/tmp/fedora-rootfs/
+	umount -R ${root_dir}/tmp/fedora-rootfs/boot/
+	umount -R ${root_dir}/tmp/fedora-rootfs/
 	
 	rm -rf ${root_dir}/tmp/fedora-rootfs/{rpmbuilds,build-stage2.sh}
 	rm -rf ${root_dir}/tmp/fedora-rootfs/usr/bin/qemu-aarch64-static
@@ -99,8 +95,7 @@ fi
 
 cleanup
 prepare
-setup_rootfs
-setup_bootfs
+setup_base
 buildiso
 cleanup
 

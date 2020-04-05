@@ -30,9 +30,12 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 	mkdir -p %buildroot/etc/
 	mkdir -p %buildroot/etc/systemd/system
 
-	sed -e 's_/usr/lib/aarch64-linux-gnu_/usr/lib64/aarch64-linux-gnu_' -i %{NVdir}/etc/nv_tegra_release
+	sed -e 's_/usr/lib/aarch64-linux-gnu_/usr/lib64/aarch64-linux-gnu/_' -i %{NVdir}/etc/nv_tegra_release
+	sed -e 's_/usr/lib/_/usr/lib64/_' -i %{NVdir}/etc/nv_tegra_release
 	cp -pdr %{NVdir}/etc/nv_tegra_release %buildroot/etc/nv_tegra_release
 	cp -pdr %{NVdir}/etc/ld.so.conf.d %buildroot/etc/ld.so.conf.d
+	echo "/usr/lib64/aarch64-linux-gnu/tegra" > %buildroot/etc/ld.so.conf.d/nvidia-tegra.conf
+	echo "/usr/lib64/aarch64-linux-gnu/tegra-egl" > %buildroot/etc/ld.so.conf.d/ld.so.conf
 
 	cp -d %{NVdir}/etc/systemd/nv* %buildroot/etc/systemd/
 	cp -d %{NVdir}/etc/systemd/system/nv*service %buildroot/etc/systemd/system/
@@ -45,14 +48,14 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 
 	mkdir -p %buildroot/usr/lib64/firmware/ %buildroot/usr/lib64/systemd/
 	
-	# Move usr/lib/aarch64-linux-gnu -> usr/lib.
+	# Copy usr/lib/aarch64-linux-gnu -> usr/lib64/aarch64-linux-gnu.
 	cp -pdr %{NVdir}/usr/lib/aarch64-linux-gnu/ %buildroot/usr/lib64/
 	
 	# Same for lib/firmware, lib/systemd.
 	cp -pdr %{NVdir}/lib/firmware/* %buildroot/usr/lib64/firmware/
 	cp -pdr %{NVdir}/lib/systemd/* %buildroot/usr/lib64/systemd/
 
-	# Pass through these 2 in usr/lib.
+	# Pass through these 2 in usr/lib64.
 	cp -pdr %{NVdir}/usr/lib/xorg %buildroot/usr/lib64/xorg/
 	cp -pdr %{NVdir}/usr/lib/nvidia %buildroot/usr/lib64/nvidia/
 	
@@ -86,13 +89,13 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 				
 	# Add a symlink for the Vulkan ICD.
 	mkdir -p %buildroot/etc/vulkan/icd.d
-	ln -s /usr/lib/aarch64-linux-gnu/tegra/nvidia_icd.json %buildroot/etc/vulkan/icd.d/nvidia_icd.json
+	ln -s /usr/lib64/aarch64-linux-gnu/tegra/nvidia_icd.json %buildroot/etc/vulkan/icd.d/nvidia_icd.json
 	
 	# And another one for EGL.
 	mkdir -p %buildroot/usr/share/glvnd/egl_vendor.d
 	ln -s /usr/lib64/aarch64-linux-gnu/tegra-egl/nvidia.json %buildroot/usr/share/glvnd/egl_vendor.d/
 	
-	# Refresh /usr/lib/ symlink to be /usr/lib64/
+	# Refresh old symlinks from /usr/lib/* to /usr/lib64/*
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libcuda.so %buildroot/usr/lib64/aarch64-linux-gnu/libcuda.so
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libcuda.so.1.1 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libcuda.so
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libnvbuf_utils.so.1.0.0 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libnvbuf_utils.so
@@ -100,7 +103,7 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libnvbufsurftransform.so.1.0.0 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libnvbufsurftransform.so
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libnvid_mapper.so.1.0.0 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libnvid_mapper.so
 	
-	cp -d %buildroot/usr/lib64/aarch64-linux-gnu/tegra-egl/ld.so.conf %buildroot/etc/ld.so.conf.d/
+	# cp -d %buildroot/usr/lib64/aarch64-linux-gnu/tegra-egl/ld.so.conf %buildroot/etc/ld.so.conf.d/
 
 %clean
 

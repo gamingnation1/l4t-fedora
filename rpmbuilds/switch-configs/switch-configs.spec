@@ -5,13 +5,13 @@ Release:	1
 License:	GPL
 BuildArch:	aarch64
 Summary:	Switch specific config for Linux
-# Source0:	git+https://gitlab.com/switchroot/switch-l4t-configs.git
+URL:		https://gitlab.com/switchroot/switch-l4t-configs
 
 %description
 	Switch specific config for Linux
 
 %install
-	git clone https://gitlab.com/switchroot/switch-l4t-configs.git 
+	git clone https://gitlab.com/switchroot/switch-l4t-configs.git
 	mkdir -p %buildroot/etc/systemd/system %buildroot/etc/X11/xorg.conf.d %buildroot/usr/bin %buildroot/usr/lib64/udev/rules.d %buildroot/etc/dconf/db/local.d %buildroot/etc/dconf/profile %buildroot/usr/share/alsa/ucm/tegra-snd-t210ref-mobile-rt565x/ %buildroot/usr/lib64/systemd/system
 
 	cd switch-l4t-configs

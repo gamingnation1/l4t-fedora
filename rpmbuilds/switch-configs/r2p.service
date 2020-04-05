@@ -1,0 +1,12 @@
+[Unit]
+Description=Setup r2p
+After=mnt-hos_data.mount
+Requires=mnt-hos_data.mount
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -c 'echo 1 > /sys/devices/r2p/default_payload_ready' 
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

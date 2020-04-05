@@ -1,11 +1,8 @@
 #!/usr/bin/bash
 uname -a
 
-# arch-chroot doesn't do this for us, so let's do it ourselves.
-mkdir /mnt/hos_data/l4t-fedora -p
-mount --bind /mnt/hos_data/l4t-fedora/ /boot/
-
 dnf -y groupinstall 'Basic Desktop' 'LXDE Desktop'
+# dnf -y install xorg-server-tegra tegra-bsp switch-boot-files-bin switch-configs systemd-suspend-modules
 
 mkdir xorg/
 
@@ -18,14 +15,10 @@ wget https://kojipkgs.fedoraproject.org/packages/xorg-x11-drv-ati/18.1.0/1.fc28/
 
 dnf -y downgrade xorg/*.rpm
 
-dnf -y install gcc git rpm-build rpm-devel rpmlint python patch rpmdevtools
-rpmdev-setuptree
-rpmbuild -ba /rpmbuilds/nvidia-drivers-package/tegra-bsp.spec
-rpmbuild -ba /rpmbuilds/switch-configs/switch-configs.spec
-rpm -ivvh --force /root/rpmbuild/RPMS/aarch64/switch-configs-1-1.aarch64.rpm
-rpm -ivvh --force /root/rpmbuild/RPMS/aarch64/tegra-bsp-r32-3.1.aarch64.rpm
-dnf -y remove gcc git rpm-build rpm-devel rpmlint python patch rpmdevtools
-rm -rf /root/rpmbuilds/
+rpm -ivvh --force /pkgs/switch-configs-1-1.aarch64.rpm
+rpm -ivvh --force /pkgs/tegra-bsp-r32-3.1.aarch64.rpm
+rpm -ivvh --force /pkgs/switch-boot-files-bin-r32-1.aarch64.rpm
+# rpm -ivvh --force /pkgs/systemd-suspend-modules-1-1.aarch64.rpm
 
 dnf -y clean all
 
@@ -67,17 +60,8 @@ systemctl set-default graphical.target
 mv /reboot_payload.bin /lib/firmware/
 
 PATH=$PATH:/usr/bin:/usr/sbin
+
 ldconfig
+
 useradd -m fedora -p fedora
-echo "Change root passwd :"
 echo "root:root" | chpasswd
-
-umount /boot
-
-cd /mnt/hos_data/
-tar cz * > /fedora-boot.tar.gz
-cd /
-
-rm -r /boot/*
-rm -r /mnt/hos_data/*
-mkdir -p /mnt/hos_data
