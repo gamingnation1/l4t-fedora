@@ -15,10 +15,9 @@ wget https://kojipkgs.fedoraproject.org/packages/xorg-x11-drv-ati/18.1.0/1.fc28/
 
 dnf -y downgrade xorg/*.rpm
 
-rpm -ivvh --force /pkgs/switch-configs-1-1.aarch64.rpm
-rpm -ivvh --force /pkgs/tegra-bsp-r32-3.1.aarch64.rpm
-rpm -ivvh --force /pkgs/switch-boot-files-bin-r32-1.aarch64.rpm
-# rpm -ivvh --force /pkgs/systemd-suspend-modules-1-1.aarch64.rpm
+for pkg in `find /pkgs/*.rpm -type f`; do
+	rpm -ivvh --force $pkg
+done
 
 dnf -y clean all
 
@@ -61,7 +60,7 @@ mv /reboot_payload.bin /lib/firmware/
 
 PATH=$PATH:/usr/bin:/usr/sbin
 
-ldconfig
-
 useradd -m fedora -p fedora
 echo "root:root" | chpasswd
+
+ldconfig

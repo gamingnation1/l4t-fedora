@@ -2,20 +2,14 @@
 
 root_dir="$(dirname "$(dirname "$(readlink -fm "$0")")")"
 
-cleanup() {
+cleanup(){
 	umount -R ${root_dir}/tmp/mnt/*
 	umount -R ${root_dir}/tmp/*
-	kpartx -dv ${root_dir}/l4t-fedora.img
-	
-	vgchange -an fedora
-	kpartx -dv ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw
-
 	rm -rf ${root_dir}/tmp/
 }
 
 prepare() {
 	mkdir -p ${root_dir}/tarballs/
-	mkdir -p ${root_dir}/tmp/mnt/boot/
 	mkdir -p ${root_dir}/tmp/mnt/root/
 	mkdir -p ${root_dir}/tmp/fedora-bootfs/
 	mkdir -p ${root_dir}/tmp/fedora-rootfs/pkgs/
@@ -38,19 +32,17 @@ setup_base() {
 	cp ${root_dir}/builder/build-stage2.sh ${root_dir}/tmp/fedora-rootfs/
 	cp -r ${root_dir}/rpmbuilds/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
 
-	kpartx -av ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw
-	sleep 1
+	losetup ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw
 	vgchange -ay fedora
-	sleep 1
 	mount -o loop /dev/mapper/fedora-root ${root_dir}/tmp/fedora_iso_root/
 
 	cp -prd ${root_dir}/tmp/fedora_iso_root/* ${root_dir}/tmp/fedora-rootfs/
 
 	umount -R ${root_dir}/tmp/fedora_iso_root/
 	vgchange -an fedora
-	kpartx -dv ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw
+	losetup -d ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw
 
-	echo -e "/dev/mmcblk0p1	/mnt/hos_data	vfat	rw,relatime	0	2\n/boot /mnt/hos_data/l4t-arch/	none	bind	0	0\n" > ${root_dir}/tmp/fedora-rootfs/etc/fstab
+	echo -e "/dev/mmcblk0p1	/boot	vfat	rw,relatime	0	2\n" > ${root_dir}/tmp/fedora-rootfs/etc/fstab
 
 	cp /usr/bin/qemu-aarch64-static ${root_dir}/tmp/fedora-rootfs/usr/bin/
 	cp /etc/resolv.conf ${root_dir}/tmp/fedora-rootfs/etc/
@@ -61,31 +53,30 @@ setup_base() {
 	umount -R ${root_dir}/tmp/fedora-rootfs/boot/
 	umount -R ${root_dir}/tmp/fedora-rootfs/
 	
-	rm -rf ${root_dir}/tmp/fedora-rootfs/{rpmbuilds,build-stage2.sh}
-	rm -rf ${root_dir}/tmp/fedora-rootfs/usr/bin/qemu-aarch64-static
+	rm ${root_dir}/tmp/fedora-rootfs/etc/pacman.d/gnupg/S.gpg-agent*
+	rm -rf ${root_dir}/tmp/fedora-rootfs/{rpmbuilds,build-stage2.sh,rpms}
+	rm ${root_dir}/tmp/fedora-rootfs/usr/bin/qemu-aarch64-static
 }
 
 buildiso() {
 	size=$(du -hs ${root_dir}/tmp/fedora-rootfs/ | head -n1 | awk '{print int($1+2);}')$(du -hs ${root_dir}/tmp/fedora-rootfs/ | head -n1 | awk '{print $1;}' | grep -o '[[:alpha:]]')
 
+	rm ${root_dir}/l4t-fedora.img
 	dd if=/dev/zero of=${root_dir}/l4t-fedora.img bs=1 count=0 seek=$size
 	
-	parted ${root_dir}/l4t-fedora.img --script -- mklabel msdos
-	parted -a optimal ${root_dir}/l4t-fedora.img mkpart primary 0% 476MB
-	parted -a optimal ${root_dir}/l4t-fedora.img mkpart primary 476MB 100%
+	loop=`losetup --find`
+	losetup $loop ${root_dir}/l4t-fedora.img
 
-	loop_dev=$(kpartx -av ${root_dir}/l4t-fedora.img | grep -oh "\w*loop\w*")
-	loop1=`echo "${loop_dev}" | head -1`
-	loop2=`echo "${loop_dev}" | tail -1`
+	mkfs.ext4 $loop
+	mount $loop ${root_dir}/tmp/mnt/rootfs/
 
-	mkfs.fat -F 32 /dev/mapper/${loop1}
-	mkfs.ext4 /dev/mapper/${loop2}
+	cp -pdr ${root_dir}/tmp/fedora-rootfs/* ${root_dir}/tmp/mnt/rootfs/
+	umount $loop
+	losetup -d $loop
 
-	mount -o loop /dev/mapper/${loop1} ${root_dir}/tmp/mnt/boot/
-	mount -o loop /dev/mapper/${loop2} ${root_dir}/tmp/mnt/root/
-	
-	cp -r ${root_dir}/tmp/fedora-bootfs/* ${root_dir}/tmp/mnt/boot/
-	cp -prd ${root_dir}/tmp/fedora-rootfs/* ${root_dir}/tmp/mnt/root/
+	pushd ${root_dir}/tmp/fedora-bootfs
+	zip -r ${root_dir}/l4t-boot.zip *
+	popd
 }
 
 if [[ `whoami` != root ]]; then
