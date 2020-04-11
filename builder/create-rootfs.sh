@@ -46,7 +46,7 @@ cleanup(){
 
 prepare() {
 	mkdir -p ${root_dir}/tarballs/
-	mkdir -p ${root_dir}/tmp/mnt/root/
+	mkdir -p ${root_dir}/tmp/mnt/rootfs/
 	mkdir -p ${root_dir}/tmp/fedora-bootfs/
 	mkdir -p ${root_dir}/tmp/fedora-rootfs/pkgs/
 	mkdir -p ${root_dir}/tmp/fedora_iso_root/
@@ -71,15 +71,15 @@ setup_base() {
 		cp -r ${root_dir}/rpmbuilds/*/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
 	fi
 
-	losetup ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw
-	vgchange -ay fedora
+	kpartx -a ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw && sleep 1
+	vgchange -ay fedora && sleep 1
 	mount -o loop /dev/mapper/fedora-root ${root_dir}/tmp/fedora_iso_root/
 
 	cp -prd ${root_dir}/tmp/fedora_iso_root/* ${root_dir}/tmp/fedora-rootfs/
 
 	umount -R ${root_dir}/tmp/fedora_iso_root/
 	vgchange -an fedora
-	losetup -d ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw
+	kpartx -d ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw
 
 	echo -e "/dev/mmcblk0p1	/boot	vfat	rw,relatime	0	2\n" > ${root_dir}/tmp/fedora-rootfs/etc/fstab
 
