@@ -69,6 +69,7 @@ setup_base() {
 	
 	if [[ $staging == "yes" ]]; then
 		cp -r ${root_dir}/rpmbuilds/*/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
+		cp -r ${root_dir}/rpmbuilds/*/*/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
 	fi
 
 	kpartx -a ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw && sleep 1
@@ -92,8 +93,7 @@ setup_base() {
 	umount -R ${root_dir}/tmp/fedora-rootfs/boot/
 	umount -R ${root_dir}/tmp/fedora-rootfs/
 	
-	rm ${root_dir}/tmp/fedora-rootfs/etc/pacman.d/gnupg/S.gpg-agent*
-	rm -rf ${root_dir}/tmp/fedora-rootfs/{rpmbuilds,build-stage2.sh,rpms}
+	rm -rf ${root_dir}/tmp/fedora-rootfs/{rpmbuilds,build-stage2.sh,pkgs}
 	rm ${root_dir}/tmp/fedora-rootfs/usr/bin/qemu-aarch64-static
 }
 
