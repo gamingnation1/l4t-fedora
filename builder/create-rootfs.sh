@@ -70,6 +70,7 @@ setup_base() {
 	if [[ $staging == "yes" ]]; then
 		cp -r ${root_dir}/rpmbuilds/*/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
 		cp -r ${root_dir}/rpmbuilds/*/*/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
+		cp kernel-modules.tar.gz ${root_dir}/tmp/fedora-rootfs
 	fi
 
 	kpartx -a ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw && sleep 1
