@@ -66,12 +66,6 @@ prepare() {
 
 setup_base() {
 	cp ${root_dir}/builder/build-stage2.sh ${root_dir}/tmp/fedora-rootfs/
-	
-	if [[ $staging == "yes" ]]; then
-		cp -r ${root_dir}/rpmbuilds/*/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
-		cp -r ${root_dir}/rpmbuilds/*/*/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
-		cp kernel-modules.tar.gz ${root_dir}/tmp/fedora-rootfs
-	fi
 
 	kpartx -a ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw && sleep 1
 	vgchange -ay fedora && sleep 1
@@ -82,6 +76,12 @@ setup_base() {
 	umount -R ${root_dir}/tmp/fedora_iso_root/
 	vgchange -an fedora
 	kpartx -d ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw
+	
+	if [[ $staging == "yes" ]]; then
+		cp -r ${root_dir}/rpmbuilds/*/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
+		cp -r ${root_dir}/rpmbuilds/*/*/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
+		tar xf ${root_dir}/kernel-modules.tar.gz -C ${root_dir}/tmp/fedora-rootfs/usr/lib/modules/
+	fi
 
 	echo -e "/dev/mmcblk0p1	/boot	vfat	rw,relatime	0	2\n" > ${root_dir}/tmp/fedora-rootfs/etc/fstab
 
