@@ -1,5 +1,41 @@
 #!/bin/bash
 
+staging=no
+options=$(getopt -o hs --long staging --long help -- "$@")
+
+usage() {
+    echo "Usage: $0 [options]"
+    echo "Options:"
+    echo " -s, --staging	Install built local packages"
+    echo " -h, --help		Show this help text"
+}
+
+[ $? -eq 0 ] || {
+	usage
+	exit 1
+}
+
+eval set -- "$options"
+while true; do
+    case "$1" in
+    -s)
+        staging=yes
+        ;;
+    --staging)
+        staging=yes
+        ;;
+    -h|--help)
+	usage
+	exit 0
+	;;
+    --)
+        shift
+        break
+        ;;
+    esac
+    shift
+done
+
 root_dir="$(dirname "$(dirname "$(readlink -fm "$0")")")"
 
 cleanup(){
@@ -30,7 +66,10 @@ prepare() {
 
 setup_base() {
 	cp ${root_dir}/builder/build-stage2.sh ${root_dir}/tmp/fedora-rootfs/
-	cp -r ${root_dir}/rpmbuilds/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
+	
+	if [[ $staging == "yes" ]]; then
+		cp -r ${root_dir}/rpmbuilds/*/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
+	fi
 
 	losetup ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw
 	vgchange -ay fedora
