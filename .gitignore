@@ -1,3 +1,9 @@
 tmp/
 kernel/
 tarballs/
+*.gz
+*.zip
+*.img
+*.rpm
+*.tbz2
+*.tar*
