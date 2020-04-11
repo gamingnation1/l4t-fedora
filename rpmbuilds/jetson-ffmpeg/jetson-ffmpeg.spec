@@ -4,6 +4,10 @@ Release:			3.1
 BuildArch:			aarch64
 License:			GPL
 URL:				"https://github.com/jocover/jetson-ffmpeg"
+Summary:			Jetson ffmpeg
+
+%description
+	Jetson ffmpeg
 
 %prep
 	git clone https://github.com/jocover/jetson-ffmpeg.git

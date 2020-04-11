@@ -6,7 +6,6 @@ License:	GPL
 BuildArch:	aarch64
 Summary:	Nvidia drivers for Tegra210
 URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_release_aarch64/Tegra210_Linux_R32.3.1_aarch64.tbz2
-# Source0:	https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_release_aarch64/Tegra210_Linux_R32.3.1_aarch64.tbz2
 
 %define NVdir   %{name}-%{version}
 

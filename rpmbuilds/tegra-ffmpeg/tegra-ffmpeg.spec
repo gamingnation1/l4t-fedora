@@ -5,6 +5,10 @@ BuildArch:		aarch64
 License:		GPL
 URL:			https://://source.ffmpeg.org/ffmpeg.git
 BuildRequires:	jetson-ffmpeg
+Summary:		FFMPEG for Tegra jetson
+
+%description
+	FFMPEG for Tegra jetson
 
 %prep
 	git clone git://source.ffmpeg.org/ffmpeg.git -b release/4.2 --depth=1
