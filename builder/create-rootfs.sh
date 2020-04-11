@@ -93,12 +93,12 @@ setup_base() {
 	umount -R ${root_dir}/tmp/fedora-rootfs/boot/
 	umount -R ${root_dir}/tmp/fedora-rootfs/
 	
-	rm -rf ${root_dir}/tmp/fedora-rootfs/{rpmbuilds,build-stage2.sh,pkgs}
+	rm -rf ${root_dir}/tmp/fedora-rootfs/{build-stage2.sh,pkgs}
 	rm ${root_dir}/tmp/fedora-rootfs/usr/bin/qemu-aarch64-static
 }
 
 buildiso() {
-	size=$(du -hs ${root_dir}/tmp/fedora-rootfs/ | head -n1 | awk '{print int($1+2);}')$(du -hs ${root_dir}/tmp/fedora-rootfs/ | head -n1 | awk '{print $1;}' | grep -o '[[:alpha:]]')
+	size="$(du -hs --block-size=1G ${root_dir}/tmp/fedora-rootfs/ | awk '{print $1;}')"G
 
 	rm ${root_dir}/l4t-fedora.img
 	dd if=/dev/zero of=${root_dir}/l4t-fedora.img bs=1 count=0 seek=$size
