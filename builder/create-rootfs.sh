@@ -99,7 +99,7 @@ setup_base() {
 }
 
 buildiso() {
-	size="$(($(du -hs --block-size=1G ${root_dir}/tmp/fedora-rootfs/ | awk '{print $1;}')+1))"G
+	size="$(($(du -hs --block-size=1G ${root_dir}/tmp/fedora-rootfs/ | awk '{print $1;}')+2))"G
 
 	rm ${root_dir}/l4t-fedora.img
 	dd if=/dev/zero of=${root_dir}/l4t-fedora.img bs=1 count=0 seek=$size
