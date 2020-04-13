@@ -99,9 +99,10 @@ setup_base() {
 }
 
 buildiso() {
-	size="$(($(du -hs --block-size=1G ${root_dir}/tmp/fedora-rootfs/ | awk '{print $1;}')+2))"G
+	# Get the size in MiB, align it upwards to nearest 4MB. Then add some free space.
+	size=$(du -hs -BM ${root_dir}/tmp/fedora-rootfs/ | head -n1 | awk '{print int($1/4)*4 + 4 + 512;}')M
+	echo "Estimated rootfs size: $size"
 
-	rm ${root_dir}/l4t-fedora.img
 	dd if=/dev/zero of=${root_dir}/l4t-fedora.img bs=1 count=0 seek=$size
 	
 	loop=`losetup --find`
@@ -114,9 +115,14 @@ buildiso() {
 	umount $loop
 	losetup -d $loop
 
-	pushd ${root_dir}/tmp/fedora-bootfs
-	zip -r ${root_dir}/l4t-boot.zip *
-	popd
+	mkdir ${root_dir}/tmp/final
+	cd ${root_dir}/tmp/final
+	mv ${root_dir}/tmp/fedora-bootfs/* .
+	mkdir -p switchroot/install/
+	mv ${root_dir}/l4t-fedora.img switchroot/install/l4t.00
+
+	rm ${root_dir}/l4t-fedora.7z
+	7z a ${root_dir}/l4t-fedora.7z *
 }
 
 if [[ `whoami` != root ]]; then
