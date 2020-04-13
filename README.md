@@ -23,7 +23,6 @@ sudo pacman -S qemu qemu-arch-extra arch-install-scripts parted dosfstools wget 
 
 On your host :
 
-- Switch to root user ( e.g.: `sudo su` )
-- Go to l4t-fedora/
-- Run `./create-rootfs.sh`
-- Burn the resulting image from `l4t-fedora/l4t-fedora.img` to your SD Card
+- Clone this repository
+- Log as root user ( `sudo su` )
+- Run `./l4t-fedora/builder/create-rootfs.sh`
