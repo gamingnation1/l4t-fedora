@@ -62,7 +62,7 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 	cp -r %{NVdir}/usr/share %buildroot/usr/share/
 	cp -r %{NVdir}/usr/bin %buildroot/usr/bin/
 	# move sbin -> bin
-	cp -r %{NVdir}/usr/sbin/* %buildroot/usr/sbin/
+	cp -r %{NVdir}/usr/sbin/ %buildroot/usr/
 	# pass through
 	cp -r %{NVdir}/var/ %buildroot/var/
 	cp -r %{NVdir}/opt/ %buildroot/opt/ 
