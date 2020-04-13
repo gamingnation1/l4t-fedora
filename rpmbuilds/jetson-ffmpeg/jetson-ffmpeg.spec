@@ -13,6 +13,7 @@ Summary:			Jetson ffmpeg
 	git clone https://github.com/jocover/jetson-ffmpeg.git
 
 	cd jetson-ffmpeg
+	sed -i 's/\/usr\/lib\//\/usr\/lib64\//g' CMakeLists.txt
 	mkdir build
 
 %build
