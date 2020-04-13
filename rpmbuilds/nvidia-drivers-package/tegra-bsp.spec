@@ -62,7 +62,7 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 	cp -r %{NVdir}/usr/share %buildroot/usr/share/
 	cp -r %{NVdir}/usr/bin %buildroot/usr/bin/
 	# move sbin -> bin
-	cp -r %{NVdir}/usr/sbin/* %buildroot/usr/bin/
+	cp -r %{NVdir}/usr/sbin/* %buildroot/usr/sbin/
 	# pass through
 	cp -r %{NVdir}/var/ %buildroot/var/
 	cp -r %{NVdir}/opt/ %buildroot/opt/ 
@@ -102,7 +102,8 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libnvbufsurftransform.so.1.0.0 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libnvbufsurftransform.so
 	ln -sfn /usr/lib64/aarch64-linux-gnu/tegra/libnvid_mapper.so.1.0.0 %buildroot/usr/lib64/aarch64-linux-gnu/tegra/libnvid_mapper.so
 
-%clean
+%post
+	/sbin/ldconfig
 
 %files
 /usr/*
