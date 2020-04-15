@@ -6,6 +6,7 @@ License:	GPL
 BuildArch:	aarch64
 Summary:	Nvidia drivers for Tegra210
 URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_release_aarch64/Tegra210_Linux_R32.3.1_aarch64.tbz2
+Requires:	cairo gstreamer1 pango libEGL libXext libX11 gstreamer1-plugins-base
 
 %define NVdir   %{name}-%{version}
 
@@ -45,13 +46,13 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 	mkdir %buildroot/etc/X11
 	cp -r %{NVdir}/etc/X11/xorg.conf %buildroot/etc/X11/
 
-	mkdir -p %buildroot/usr/lib64/firmware/ %buildroot/usr/lib64/systemd/
+	mkdir -p %buildroot/usr/lib/firmware/ %buildroot/usr/lib64/systemd/
 	
 	# Copy usr/lib/aarch64-linux-gnu -> usr/lib64/aarch64-linux-gnu.
 	cp -r %{NVdir}/usr/lib/aarch64-linux-gnu/ %buildroot/usr/lib64/
 	
 	# Same for lib/firmware, lib/systemd.
-	cp -r %{NVdir}/lib/firmware/* %buildroot/usr/lib64/firmware/
+	cp -r %{NVdir}/lib/firmware/* %buildroot/usr/lib/firmware/
 	cp -r %{NVdir}/lib/systemd/* %buildroot/usr/lib64/systemd/
 
 	# Pass through these 2 in usr/lib64.
@@ -67,8 +68,8 @@ URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_rel
 	cp -r %{NVdir}/var/ %buildroot/var/
 	cp -r %{NVdir}/opt/ %buildroot/opt/ 
 
-	[[ ! -e %buildroot/usr/lib64/firmware/gm20b ]] && mkdir %buildroot/usr/lib64/firmware/gm20b
-	pushd %buildroot/usr/lib64/firmware/gm20b > /dev/null 2>&1
+	[[ ! -e %buildroot/usr/lib/firmware/gm20b ]] && mkdir %buildroot/usr/lib/firmware/gm20b
+	pushd %buildroot/usr/lib/firmware/gm20b > /dev/null 2>&1
                 ln -sf "../tegra21x/acr_ucode.bin" "acr_ucode.bin"
                 ln -sf "../tegra21x/gpmu_ucode.bin" "gpmu_ucode.bin"
                 ln -sf "../tegra21x/gpmu_ucode_desc.bin" \
