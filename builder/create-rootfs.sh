@@ -123,7 +123,7 @@ buildiso() {
 	mv ${root_dir}/l4t-fedora.img switchroot/install/
 
 	cd switchroot/install/
-	split -db 3900M l4t-fedora.img l4t.
+	split -b4290772992 --numeric-suffixes=0 l4t-fedora.img l4t-fedora.
 	rm l4t-fedora.img
 	cd ../../
 
