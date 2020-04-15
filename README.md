@@ -16,7 +16,7 @@ A SD Card with a minimum of 8Go.
 On Arch host install `qemu-user-static` from `AUR` and :
 
 ```sh
-sudo pacman -S qemu qemu-arch-extra arch-install-scripts parted dosfstools wget libarchive lvm2 multipath-tools
+sudo pacman -S qemu qemu-arch-extra arch-install-scripts parted dosfstools wget libarchive lvm2 multipath-tools p7zip
 ```
 
 ## Build
