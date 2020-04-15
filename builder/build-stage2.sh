@@ -3,8 +3,9 @@ uname -a
 
 dnf -y update
 dnf -y groupinstall 'Basic Desktop' 'LXDE Desktop'
+dnf -y install lightdm onboard
 # dnf -y install xorg-server-tegra tegra-bsp switch-boot-files-bin switch-configs systemd-suspend-modules
-dnf -y remove xorg-x11-server-common
+dnf -y remove xorg-x11-server-common lxdm
 
 mkdir xorg/
 wget https://kojipkgs.fedoraproject.org/packages/xorg-x11-drv-nouveau/1.0.15/4.fc28/aarch64/xorg-x11-drv-nouveau-1.0.15-4.fc28.aarch64.rpm -P xorg/
@@ -32,12 +33,12 @@ dnf -y clean all
 
 echo 'l4t-fedora.local' > /etc/hostname
 echo '127.0.0.1   l4t-fedora.local l4t-fedora' >> /etc/hosts
-sed -i 's/# autologin.*/autologin=fedora/' /etc/lxdm/lxdm.conf
+#sed -i 's/# autologin.*/autologin=fedora/' /etc/lxdm/lxdm.conf
 
-echo 'sessreg -a -l $DISPLAY -x /etc/X11/xdm/Xservers $USER &' >> \
-  /etc/lxdm/PostLogin
-echo 'sessreg -d -l $DISPLAY -x /etc/X11/xdm/Xservers $USER &' >> \
-  /etc/lxdm/PostLogout
+#echo 'sessreg -a -l $DISPLAY -x /etc/X11/xdm/Xservers $USER &' >> \
+#  /etc/lxdm/PostLogin
+#echo 'sessreg -d -l $DISPLAY -x /etc/X11/xdm/Xservers $USER &' >> \
+#  /etc/lxdm/PostLogout
 
 echo "[Unit]
 Description=Setup r2p
@@ -58,10 +59,10 @@ EndSection' > /etc/X11/xorg.conf.d/10-monitor.conf
 rm -f /etc/systemd/system/display-manager.service
 systemctl enable r2p
 systemctl enable bluetooth
-systemctl enable lxdm
+systemctl enable lightdm
 systemctl set-default graphical.target
 
-# sed -i 's/#keyboard=/keyboard=onboard/' /etc/lightdm/lightdm-gtk-greeter.conf
+sed -i 's/#keyboard=/keyboard=onboard/' /etc/lightdm/lightdm-gtk-greeter.conf
 
 mv /reboot_payload.bin /lib/firmware/
 
