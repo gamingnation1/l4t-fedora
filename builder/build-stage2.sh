@@ -1,9 +1,9 @@
 #!/usr/bin/bash
 uname -a
 
+dnf -y update
 dnf -y groupinstall 'Basic Desktop' 'LXDE Desktop'
 # dnf -y install xorg-server-tegra tegra-bsp switch-boot-files-bin switch-configs systemd-suspend-modules
-
 dnf -y remove xorg-x11-server-common
 
 mkdir xorg/
@@ -30,18 +30,21 @@ done
 
 dnf -y clean all
 
-echo l4t-fedora.local > /etc/hostname
+echo 'l4t-fedora.local' > /etc/hostname
 echo '127.0.0.1   l4t-fedora.local l4t-fedora' >> /etc/hosts
 sed -i 's/# autologin.*/autologin=fedora/' /etc/lxdm/lxdm.conf
 
-mv etc/systemd/system/getty.target.wants/getty@tty1.service root/
+echo 'sessreg -a -l $DISPLAY -x /etc/X11/xdm/Xservers $USER &' >> \
+  /etc/lxdm/PostLogin
+echo 'sessreg -d -l $DISPLAY -x /etc/X11/xdm/Xservers $USER &' >> \
+  /etc/lxdm/PostLogout
 
 echo "[Unit]
 Description=Setup r2p
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/bash -c 'echo 1 > /sys/devices/r2p/default_payload' 
+ExecStart=/usr/bin/bash -c 'echo 1 > /sys/devices/r2p/default_payload_ready' 
 RemainAfterExit=true
 
 [Install]
@@ -51,11 +54,6 @@ echo 'Section "Monitor"
    Identifier "DFP-0"
    Option "Rotate" "left"
 EndSection' > /etc/X11/xorg.conf.d/10-monitor.conf
-
-echo 'sessreg -a -l $DISPLAY -x /etc/X11/xdm/Xservers $USER &' >> \
-  /etc/lxdm/PostLogin
-echo 'sessreg -d -l $DISPLAY -x /etc/X11/xdm/Xservers $USER &' >> \
-  /etc/lxdm/PostLogout
 
 rm -f /etc/systemd/system/display-manager.service
 systemctl enable r2p
