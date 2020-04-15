@@ -5,7 +5,7 @@ dnf -y update
 dnf -y groupinstall 'Basic Desktop' 'LXDE Desktop'
 dnf -y install lightdm onboard
 # dnf -y install xorg-server-tegra tegra-bsp switch-boot-files-bin switch-configs systemd-suspend-modules
-dnf -y remove xorg-x11-server-common lxdm
+dnf -y remove xorg-x11-server-common lxdm linux-firmware
 
 mkdir xorg/
 wget https://kojipkgs.fedoraproject.org/packages/xorg-x11-drv-nouveau/1.0.15/4.fc28/aarch64/xorg-x11-drv-nouveau-1.0.15-4.fc28.aarch64.rpm -P xorg/
@@ -21,7 +21,6 @@ wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg
 wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xorg-1.19.6-7.fc28.aarch64.rpm -P xorg/
 wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xvfb-1.19.6-7.fc28.aarch64.rpm -P xorg/
 wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xwayland-1.19.6-7.fc28.aarch64.rpm -P xorg/
-
 dnf -y install xorg/*.rpm
 rm -r xorg
 
@@ -31,6 +30,8 @@ done
 
 dnf -y clean all
 
+
+sed -i 's/exclude=/exclude=linux-firmware xorg-x11-*/g' 
 echo 'l4t-fedora.local' > /etc/hostname
 echo '127.0.0.1   l4t-fedora.local l4t-fedora' >> /etc/hosts
 #sed -i 's/# autologin.*/autologin=fedora/' /etc/lxdm/lxdm.conf
