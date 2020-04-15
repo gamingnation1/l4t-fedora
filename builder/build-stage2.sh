@@ -31,7 +31,7 @@ done
 dnf -y clean all
 
 
-sed -i 's/exclude=/exclude=linux-firmware xorg-x11-*/g' 
+echo 'exclude=linux-firmware xorg-x11-*' >> /etc/dnf/dnf.conf 
 echo 'l4t-fedora.local' > /etc/hostname
 echo '127.0.0.1   l4t-fedora.local l4t-fedora' >> /etc/hosts
 #sed -i 's/# autologin.*/autologin=fedora/' /etc/lxdm/lxdm.conf
