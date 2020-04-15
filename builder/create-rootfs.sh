@@ -57,15 +57,15 @@ prepare() {
 	fi
 
 	if [[ ! -e ${root_dir}/tmp/fedora-rootfs/reboot_payload.bin ]]; then
-		wget https://github.com/CTCaer/hekate/releases/download/v5.1.3/hekate_ctcaer_5.1.3_Nyx_0.8.6.zip -P ${root_dir}/tmp/
-		unzip ${root_dir}/tmp/hekate_ctcaer_5.1.3_Nyx_0.8.6.zip hekate_ctcaer_5.1.3.bin
-		mv hekate_ctcaer_5.1.3.bin ${root_dir}/tmp/fedora-rootfs/reboot_payload.bin
-		rm ${root_dir}/tmp/hekate_ctcaer_5.1.3_Nyx_0.8.6.zip
+		wget https://github.com/CTCaer/hekate/releases/download/v5.1.4/hekate_ctcaer_5.1.4_Nyx_0.8.7.zip -P ${root_dir}/tmp/
+		unzip ${root_dir}/tmp/hekate_ctcaer_5.1.4_Nyx_0.8.7.zip hekate_ctcaer_5.1.4.bin
+		mv hekate_ctcaer_5.1.4.bin ${root_dir}/tmp/fedora-rootfs/reboot_payload.bin
+		rm ${root_dir}/tmp/hekate_ctcaer_5.1.4_Nyx_0.8.7.zip
 	fi
 }
 
 setup_base() {
-	cp ${root_dir}/builder/build-stage2.sh ${root_dir}/tmp/fedora-rootfs/
+	cp ${root_dir}/builder/build-stage2.sh ${root_dir}/builder/base-pkgs ${root_dir}/tmp/fedora-rootfs/
 
 	kpartx -a ${root_dir}/tarballs/Fedora-Server-31-1.9.aarch64.raw && sleep 1
 	vgchange -ay fedora && sleep 1
@@ -84,6 +84,7 @@ setup_base() {
 	fi
 
 	echo -e "/dev/mmcblk0p1	/boot	vfat	rw,relatime	0	2\n" > ${root_dir}/tmp/fedora-rootfs/etc/fstab
+	sed -i 's/^HOOKS=(\(.*\))$/HOOKS=(\1 resize-rootfs)/' ${root_dir}/tmp/arch-rootfs/etc/mkinitcpio.conf
 
 	cp /usr/bin/qemu-aarch64-static ${root_dir}/tmp/fedora-rootfs/usr/bin/
 	cp /etc/resolv.conf ${root_dir}/tmp/fedora-rootfs/etc/
@@ -94,7 +95,7 @@ setup_base() {
 	umount -R ${root_dir}/tmp/fedora-rootfs/boot/
 	umount -R ${root_dir}/tmp/fedora-rootfs/
 	
-	rm -rf ${root_dir}/tmp/fedora-rootfs/{build-stage2.sh,pkgs}
+	rm -rf ${root_dir}/tmp/fedora-rootfs/{build-stage2.sh,pkgs,base-pkgs}
 	rm ${root_dir}/tmp/fedora-rootfs/usr/bin/qemu-aarch64-static
 }
 

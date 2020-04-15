@@ -3,26 +3,9 @@ uname -a
 
 dnf -y update
 dnf -y groupinstall 'Basic Desktop' 'LXDE Desktop'
-dnf -y install lightdm onboard
-# dnf -y install xorg-server-tegra tegra-bsp switch-boot-files-bin switch-configs systemd-suspend-modules
-dnf -y remove xorg-x11-server-common lxdm linux-firmware
-
-mkdir xorg/
-wget https://kojipkgs.fedoraproject.org/packages/xorg-x11-drv-nouveau/1.0.15/4.fc28/aarch64/xorg-x11-drv-nouveau-1.0.15-4.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org/packages/xorg-x11-drv-qxl/0.1.5/6.fc28/aarch64/xorg-x11-drv-qxl-0.1.5-6.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org/packages/xorg-x11-drv-fbdev/0.4.3/29.fc28/aarch64/xorg-x11-drv-fbdev-0.4.3-29.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org/packages/xorg-x11-drv-armsoc/1.4.0/7.20160929.fc28/aarch64/xorg-x11-drv-armsoc-1.4.0-7.20160929.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org/packages/xorg-x11-drv-ati/18.1.0/1.fc28/aarch64/xorg-x11-drv-ati-18.1.0-1.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-common-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-devel-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xdmx-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xephyr-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xnest-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xorg-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xvfb-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xwayland-1.19.6-7.fc28.aarch64.rpm -P xorg/
-dnf -y install xorg/*.rpm
-rm -r xorg
+dnf -y remove xorg-x11-server-common lxdm linux-firmware iscsi-initiator-utils-iscsiuio iscsi-initiator-utils clevis-luks atmel-firmware
+dnf -y install `cat base-pkgs`
+# dnf -y install tegra-bsp switch-boot-files-bin switch-configs systemd-suspend-modules
 
 for pkg in `find /pkgs/*.rpm -type f`; do
 	rpm -ivvh --force $pkg
@@ -30,16 +13,9 @@ done
 
 dnf -y clean all
 
-
-echo 'exclude=linux-firmware xorg-x11-*' >> /etc/dnf/dnf.conf 
+echo 'exclude=linux-firmware xorg-x11-server-* xorg-x11-drv-ati xorg-x11-drv-armsoc xorg-x11-drv-nouveau xorg-x11-drv-ati xorg-x11-drv-qxl xorg-x11-drv-fbdev' >> /etc/dnf/dnf.conf 
 echo 'l4t-fedora.local' > /etc/hostname
 echo '127.0.0.1   l4t-fedora.local l4t-fedora' >> /etc/hosts
-#sed -i 's/# autologin.*/autologin=fedora/' /etc/lxdm/lxdm.conf
-
-#echo 'sessreg -a -l $DISPLAY -x /etc/X11/xdm/Xservers $USER &' >> \
-#  /etc/lxdm/PostLogin
-#echo 'sessreg -d -l $DISPLAY -x /etc/X11/xdm/Xservers $USER &' >> \
-#  /etc/lxdm/PostLogout
 
 echo "[Unit]
 Description=Setup r2p
