@@ -12,6 +12,7 @@ wget https://kojipkgs.fedoraproject.org/packages/xorg-x11-drv-fbdev/0.4.3/29.fc2
 wget https://kojipkgs.fedoraproject.org/packages/xorg-x11-drv-armsoc/1.4.0/7.20160929.fc28/aarch64/xorg-x11-drv-armsoc-1.4.0-7.20160929.fc28.aarch64.rpm -P xorg/
 wget https://kojipkgs.fedoraproject.org/packages/xorg-x11-drv-ati/18.1.0/1.fc28/aarch64/xorg-x11-drv-ati-18.1.0-1.fc28.aarch64.rpm -P xorg/
 wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-common-1.19.6-7.fc28.aarch64.rpm -P xorg/
+wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-devel-1.19.6-7.fc28.aarch64.rpm -P xorg/
 
 dnf -y downgrade xorg/*.rpm
 rm xorg/*.rpm
@@ -22,15 +23,6 @@ wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg
 wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xorg-1.19.6-7.fc28.aarch64.rpm -P xorg/
 wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xvfb-1.19.6-7.fc28.aarch64.rpm -P xorg/
 wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xwayland-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-devel-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xdmx-debuginfo-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xephyr-debuginfo-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xnest-debuginfo-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xorg-debuginfo-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xvfb-debuginfo-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-Xwayland-debuginfo-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-debuginfo-1.19.6-7.fc28.aarch64.rpm -P xorg/
-wget https://kojipkgs.fedoraproject.org//vol/fedora_koji_archive02/packages/xorg-x11-server/1.19.6/7.fc28/aarch64/xorg-x11-server-debugsource-1.19.6-7.fc28.aarch64.rpm -P xorg/
 
 dnf -y install xorg/*.rpm
 rm -r xorg

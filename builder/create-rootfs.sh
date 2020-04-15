@@ -118,8 +118,14 @@ buildiso() {
 	mkdir ${root_dir}/tmp/final
 	cd ${root_dir}/tmp/final
 	mv ${root_dir}/tmp/fedora-bootfs/* .
+	
 	mkdir -p switchroot/install/
-	mv ${root_dir}/l4t-fedora.img switchroot/install/l4t.00
+	mv ${root_dir}/l4t-fedora.img switchroot/install/
+
+	cd switchroot/install/
+	split -db 3900M l4t-fedora.img l4t.
+	rm l4t-fedora.img
+	cd ../../
 
 	rm ${root_dir}/l4t-fedora.7z
 	7z a ${root_dir}/l4t-fedora.7z *
