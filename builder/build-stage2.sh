@@ -37,6 +37,7 @@ rm -f /etc/systemd/system/display-manager.service
 systemctl enable r2p
 systemctl enable bluetooth
 systemctl enable lightdm
+systemctl enable NetworkManager
 systemctl set-default graphical.target
 
 sed -i 's/#keyboard=/keyboard=onboard/' /etc/lightdm/lightdm-gtk-greeter.conf

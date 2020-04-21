@@ -80,7 +80,7 @@ setup_base() {
 	if [[ $staging == "yes" ]]; then
 		cp -r ${root_dir}/rpmbuilds/*/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
 		cp -r ${root_dir}/rpmbuilds/*/*/*.rpm ${root_dir}/tmp/fedora-rootfs/pkgs/
-		tar xf ${root_dir}/kernel-modules.tar.gz -C ${root_dir}/tmp/fedora-rootfs/usr/lib/modules/
+		7z x ${root_dir}/l4t-kernel.7z lib/ -o${root_dir}/tmp/fedora-rootfs/usr/lib/modules/
 	fi
 
 	echo -e "/dev/mmcblk0p1	/boot	vfat	rw,relatime	0	2\n" > ${root_dir}/tmp/fedora-rootfs/etc/fstab
