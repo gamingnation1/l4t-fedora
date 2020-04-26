@@ -84,7 +84,7 @@ setup_base() {
 	fi
 
 	echo -e "/dev/mmcblk0p1	/boot	vfat	rw,relatime	0	2\n" > ${root_dir}/tmp/fedora-rootfs/etc/fstab
-	sed -i 's/^HOOKS=(\(.*\))$/HOOKS=(\1 resize-rootfs)/' ${root_dir}/tmp/arch-rootfs/etc/mkinitcpio.conf
+	# sed -i 's/^HOOKS=(\(.*\))$/HOOKS=(\1 resize-rootfs)/' ${root_dir}/tmp/arch-rootfs/etc/mkinitcpio.conf
 
 	cp /usr/bin/qemu-aarch64-static ${root_dir}/tmp/fedora-rootfs/usr/bin/
 	cp /etc/resolv.conf ${root_dir}/tmp/fedora-rootfs/etc/

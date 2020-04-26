@@ -3,8 +3,7 @@
 ## Docker
 
 ```sh
-docker image build -t fedoral4tbuild:1.0 .
-docker run --privileged --cap-add=SYS_ADMIN --rm -i -t --name fedoral4tbuild fedoral4tbuild:1.0
+./docker-builder/build.sh
 ```
 
 ## Prepare
