@@ -4,7 +4,7 @@ Release:		3.1
 BuildArch:		aarch64
 License:		GPL
 URL:			https://://source.ffmpeg.org/ffmpeg.git
-BuildRequires:	jetson-ffmpeg
+BuildRequires:		jetson-ffmpeg
 Summary:		FFMPEG for Tegra jetson
 
 %description
@@ -15,7 +15,7 @@ Summary:		FFMPEG for Tegra jetson
 	cd ffmpeg/
 	wget https://github.com/jocover/jetson-ffmpeg/raw/master/ffmpeg_nvmpi.patch
 	git apply ffmpeg_nvmpi.patch
-	./configure --enable-nvmpi --prefix=/usr
+	./configure --enable-nvmpi -- prefix=/usr --libdir=/usr/lib64
 
 %build
 	cd ffmpeg/

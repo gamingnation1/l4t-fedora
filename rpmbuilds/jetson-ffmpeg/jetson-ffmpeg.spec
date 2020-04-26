@@ -5,7 +5,7 @@ BuildArch:			aarch64
 License:			GPL
 URL:				"https://github.com/jocover/jetson-ffmpeg"
 Summary:			Jetson ffmpeg
-BuildRequires:		git cmake gcc-c++ tegra-bsp
+BuildRequires:			git cmake gcc-c++ tegra-bsp mesa-libEGL-devel
 
 %description
 	Jetson ffmpeg
@@ -26,15 +26,14 @@ BuildRequires:		git cmake gcc-c++ tegra-bsp
 
 %build
 	cd jetson-ffmpeg/build
-	cmake ..
+
+	# https://stackoverflow.com/questions/24813827/cmake-failing-to-detect-pthreads-due-to-warnings/25130590#25130590
+	cmake -DCMAKE_INSTALL_PREFIX=/usr -lpthread ..
 	make -j$(nproc)
 
 %install
 	cd jetson-ffmpeg/build
-	install -m644 libnvmpi.so.1.0.0 %buildroot/usr/lib/libnvmpi.so.1.0.0
-	install -m644 libnvmpi.so %buildroot/usr/lib/libnvmpi.so
-	install -m644 ../nvmpi.h %buildroot/usr/include/nvmpi.h
-	install -m644 nvmpi.pc %buildroot/usr/share/pkgconfig/nvmpi.pc
+	make install
 
 %post
 	/sbin/ldconfig
