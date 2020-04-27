@@ -1,11 +1,11 @@
 # Maintainer: Your Name <youremail@domain.com>
 Name:		tegra-bsp
-Version:	r32
-Release:	3.1
+Version:	R32
+Release:	4.2
 License:	GPL
 BuildArch:	aarch64
 Summary:	Nvidia drivers for Tegra210
-URL:		https://developer.nvidia.com/embedded/dlc/r32-3-1_Release_v1.0/t210ref_release_aarch64/Tegra210_Linux_R32.3.1_aarch64.tbz2
+URL:		https://developer.nvidia.com/embedded/L4T/r32_Release_v4.2/t210ref_release_aarch64/Tegra210_Linux_%{version}.%{release}_aarch64.tbz2
 Requires:	cairo gstreamer1 pango libEGL libXext libX11 gstreamer1-plugins-base
 
 %define NVdir   %{name}-%{version}
@@ -17,8 +17,8 @@ Requires:	cairo gstreamer1 pango libEGL libXext libX11 gstreamer1-plugins-base
 	rm -rf %{NVdir}
 	wget %{url} -P %{NVdir}
 	cd %{NVdir}
-	tar xvf Tegra210_Linux_R32.3.1_aarch64.tbz2
-	rm Tegra210_Linux_R32.3.1_aarch64.tbz2
+	tar xvf Tegra210_Linux_%{version}.%{release}_aarch64.tbz2
+	rm Tegra210_Linux_%{version}.%{release}_aarch64.tbz2
 
 %build
 	cd %{NVdir}

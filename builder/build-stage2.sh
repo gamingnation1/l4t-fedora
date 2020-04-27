@@ -49,5 +49,7 @@ PATH=$PATH:/usr/bin:/usr/sbin
 useradd -m fedora
 echo "fedora:fedora" | chpasswd
 echo "root:root" | chpasswd
+gpasswd -a fedora audio
+gpasswd -a fedora video
 
 ldconfig
