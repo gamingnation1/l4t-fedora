@@ -1,27 +1,36 @@
 # L4T-Fedora
 
-## Docker
+Fedora Linux arm64 repository for L4T.
 
-```sh
-./docker-builder/build.sh
+## Scripts options
+
+```
+Usage: create-rootfs.sh [options]
+Options:
+ -s, --staging	Install built local packages
+ -h, --help		Show this help text
 ```
 
-## Prepare
+*Options **can** be used with either docker `build.sh` helper script or `create-rootfs.sh`.*
 
-A SD Card with a minimum of 8Go.
+## Building with Docker
+
+```sh
+git clone https://github.com/Azkali/l4t-fedora/
+./l4t-fedora/docker-builder/build.sh
+```
+
+## Building without Docker
 
 ### Dependencies
 
-On Arch host install `qemu-user-static` from `AUR` and :
+On a Arch Linux host install `qemu-user-static` from `AUR` and :
 
 ```sh
-sudo pacman -S qemu qemu-arch-extra arch-install-scripts parted dosfstools wget libarchive lvm2 multipath-tools p7zip
+pacman -S qemu qemu-arch-extra arch-install-scripts parted dosfstools wget libarchive p7zip
 ```
 
-## Build
+### Building
 
-On your host :
-
-- Clone this repository
-- Log as root user ( `sudo su` )
-- Run `./l4t-fedora/builder/create-rootfs.sh`
+- `git clone https://github.com/Azkali/l4t-fedora/`
+- As root user run `./l4t-fedora/builder/create-rootfs.sh`
