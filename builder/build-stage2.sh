@@ -3,7 +3,7 @@ uname -a
 
 dnf -y update
 dnf -y groupinstall 'Basic Desktop' 'Xfce Desktop'
-dnf -y remove xorg-x11-server-common linux-firmware iscsi-initiator-utils-iscsiuio iscsi-initiator-utils clevis-luks atmel-firmware
+dnf -y remove xorg-x11-server-common linux-firmware iscsi-initiator-utils-iscsiuio iscsi-initiator-utils clevis-luks atmel-firmware kernel*
 dnf -y install `cat base-pkgs`
 
 for pkg in `find /pkgs/*.rpm -type f`; do
