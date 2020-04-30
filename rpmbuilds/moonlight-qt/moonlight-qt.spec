@@ -1,19 +1,19 @@
-Name:				moonlight-qt
+Name:				moonlight
 Version:			1
 Release:			0
 BuildArch:			aarch64
 License:			GPL
-URL:				"https://github.com/moonlight-stream/monlight-qt"
-Summary:			Moonlight QT
-BuildRequires:		git cmake gcc-c++ tegra-bsp jetson-ffmpeg tegra-ffmpeg qt5-qtbase qt5-qtbase-devel qt5-devel compat-ffmpeg28
+URL:				"https://github.com/moonlight-stream/moonlight-qt"
+Summary:			Moonlight-QT
+BuildRequires:		git cmake gcc-c++ tegra-bsp jetson-ffmpeg tegra-ffmpeg qt5-qtbase qt5-qtbase-devel qt5-devel compat-ffmpeg28 alsa-lib-devel openssl-devel
 
 %description
 	Moonlight QT
 
 %prep
-	git clone https://github.com/moonlight-stream/monlight-qt
-
+	git clone %url
 	cd moonlight-qt
+	git submodule update --init --recursive
 	qmake-qt5 moonlight-qt.pro
 
 %build
@@ -22,7 +22,7 @@ BuildRequires:		git cmake gcc-c++ tegra-bsp jetson-ffmpeg tegra-ffmpeg qt5-qtbas
 
 %install
 	cd moonlight-qt
-	make install
+	make DESTDIR=%buildroot install
 
 %post
 	/sbin/ldconfig

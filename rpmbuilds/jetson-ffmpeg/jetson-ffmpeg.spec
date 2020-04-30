@@ -5,13 +5,13 @@ BuildArch:			aarch64
 License:			GPL
 URL:				"https://github.com/jocover/jetson-ffmpeg"
 Summary:			Jetson ffmpeg
-BuildRequires:			git cmake gcc-c++ tegra-bsp mesa-libEGL-devel
+BuildRequires:		git cmake gcc-c++ tegra-bsp mesa-libEGL-devel
 
 %description
 	Jetson ffmpeg
 
 %prep
-	git clone https://github.com/jocover/jetson-ffmpeg.git
+	git clone %url
 
 	cd jetson-ffmpeg
 
@@ -33,7 +33,7 @@ BuildRequires:			git cmake gcc-c++ tegra-bsp mesa-libEGL-devel
 
 %install
 	cd jetson-ffmpeg/build
-	make install
+	make DESTDIR=%buildroot install
 
 %post
 	/sbin/ldconfig
