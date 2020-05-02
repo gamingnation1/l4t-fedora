@@ -7,9 +7,11 @@ Fedora Linux arm64 repository for L4T.
 ```
 Usage: create-rootfs.sh [options]
 Options:
+ -d, --docker   Build using Docker
  -s, --staging	Install built local packages
  -h, --help		Show this help text
 ```
+
 
 *Options **can** be used with either docker `build.sh` helper script or `create-rootfs.sh`.*
 
