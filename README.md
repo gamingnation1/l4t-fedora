@@ -12,9 +12,6 @@ Options:
  -h, --help		Show this help text
 ```
 
-
-*Options **can** be used with either docker `build.sh` helper script or `create-rootfs.sh`.*
-
 ## Building with Docker
 
 ```sh
